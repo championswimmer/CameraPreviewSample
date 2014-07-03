@@ -1,1 +1,7 @@
 /build
+.idea
+.idea/
+build/
+out/
+local.properties
+
