@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
@@ -18,6 +20,8 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
     public Camera c;
     public Camera.Parameters p;
 
+    public TextView tv1;
+
     public Button b;
 
     @Override
@@ -26,6 +30,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         setContentView(R.layout.activity_main);
 
         sv = (SurfaceView) findViewById(R.id.surfaceview1);
+        tv1 = (TextView) findViewById(R.id.tv1);
         sh = sv.getHolder();
         sh.addCallback(this);
 
@@ -39,8 +44,8 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
                 Log.d("Champ", p.getPreviewSize().toString());
                 Log.d("Champ", p.toString());
 
-                p.setPreviewSize(176,144);
-                p.setRotation(180);
+                p.setPreviewSize(640,480);
+                c.setDisplayOrientation(90);
                 c.setParameters(p);
 
                 try {
@@ -48,11 +53,20 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                List<Camera.Size> previewSizes = c.getParameters().getSupportedPreviewSizes();
+                Camera.Size cs[] = new Camera.Size[20];
+                previewSizes.toArray(cs);
+                Log.d("Champ", " " + cs[0].height + cs[0].width);
+                Log.d("Champ", " " + cs[1].height + cs[1].width);
+                Log.d("Champ", " " + cs[2].height + cs[2].width);
+                Log.d("Champ", " " + cs[3].height + cs[3].width);
+                Log.d("Champ", " " + cs[4].height + cs[4].width);
                 c.startPreview();
                 c.setFaceDetectionListener(new Camera.FaceDetectionListener() {
                     @Override
                     public void onFaceDetection(Camera.Face[] faces, Camera camera) {
                         Log.e("Champ", "we have " + faces.length + " faces");
+                        tv1.setText("Faces = " + faces.length);
                     }
                 });
                 c.startFaceDetection();
